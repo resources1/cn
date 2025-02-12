@@ -6,6 +6,9 @@ sudo ufw allow ftp
 Perform
 ftp ipaddress
 Id pass daalo
+then, ls    >show list
+put filename   >give file
+get filename   >take file
 
  Exp 
 perform file transfer and access using FTP

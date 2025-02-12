@@ -1,0 +1,69 @@
+1. PING (Packet Internet Groper) command is used to check the network connectivity between host
+and server/host. This command takes as input the IP address or the URL and sends a data packet
+to the specified address with the message “PING” and get a response from the server/host this
+time is recorded which is called latency. Fast ping low latency means faster connection. Ping
+uses ICMP(Internet Control Message Protocol) to send an ICMP echo message to the specified
+host if that host is available then it sends ICMP reply message. Ping is generally measured in
+millisecond every modern operating system has this ping pre-installed. 
+Ping www.google.com
+2. tracepath command in Linux is used to traces path to destination discovering MTU along this
+path. It uses UDP port or some random port. It is similar to traceroute, but it does not require
+superuser privileges and has no fancy options. tracepath6 is a good replacement
+for traceroute6 and classic example of the application of Linux error queues. The situation with
+IPv4 is worse because commercial IP routers do not return enough information in ICMP error
+messages. Probably, it will change, when they will be updated. For now, it uses Van Jacobson’s
+trick, sweeping a range of UDP ports to maintain trace history.
+tracepath  www.google.com
+3. Nslookup (stands for “Name Server Lookup”) is a useful command for getting information from
+the DNS server. It is a network administration tool for querying the Domain Name System (DNS)
+to obtain domain name or IP address mapping or any other specific DNS record. It is also used to
+troubleshoot DNS-related problems. 
+Nslookup google.com
+4. Netstat command displays various network related information such as network connections,
+routing tables, interface statistics, masquerade connections, multicast memberships etc.,
+Netstat -lu / netstat -lt
+5. arp command manipulates the System’s ARP cache. It also allows a complete dump of the ARP
+cache. ARP stands for Address Resolution Protocol. The primary function of this protocol is to
+resolve the IP address of a system to its mac address, and hence it works between level 2(Data
+link layer) and level 3(Network layer). 
+Arp -v / -n / -a
+6. The RARP is on the Network Access Layer and is employed to send data between two points in a
+very network. Each network participant has two unique addresses:- IP address (a logical address)
+and MAC address (the physical address).  The IP address gets assigned by software and after that
+the MAC address is constructed into the hardware. The RARP server that responds to RARP
+requests, can even be any normal computer within the network. However, it must hold the data
+of all the MAC addresses with their assigned IP addresses. If a RARP request is received by the
+network, only these RARP servers can reply to it. The info packet needs to be sent on very cheap
+layers of the network. This implies that the packet is transferred to all the participants at the
+identical time.  The client broadcasts a RARP request with an Ethernet broadcast address and
+with its own physical address. The server responds by informing the client its IP address.
+rarp
+
+7. Ip command in Linux is present in the net-tools which are used for performing several network
+administration tasks. IP stands for Internet Protocol. This command is used to show or
+manipulate routing, devices, and tunnels. It is similar to the  ifconfig  command, but it is much
+more powerful with more functions and facilities attached to it. ifconfig is one of the deprecated
+commands in the net-tools of Linux that has not been maintained for many years. The ip
+command is used to perform several tasks like assigning an address to a network interface or
+configuring network interface parameters. It can perform several other tasks like configuring and
+modifying the default and static routing, setting up a tunnel over IP, listing IP addresses and
+property information, modifying the status of the interface, and assigning, deleting, and setting
+up IP addresses and routes. 
+Ip -s link/ ip
+8. ifconfig(interface configuration) command is used to configure the kernel-resident network
+interfaces. It is used at the boot time to set up the interfaces as necessary. After that, it is usually
+used when needed during debugging or when you need system tuning. Also, this command is
+used to assign the IP address and netmask to an interface or to enable or disable a given
+interface.
+ifconfig
+9. dig command stands for Domain Information Groper. It is used for retrieving information about
+DNS name servers. It is basically used by network administrators. It is used for verifying and
+troubleshooting DNS problems and to perform DNS lookups. Dig command replaces older tools.
+Dig geeksforgeeks.org
+10. The IP/kernel routing table acts as a crucial map, determining how network packets are
+forwarded between different hosts and networks. By utilizing the route command, Linux
+administrators and users can establish static routes, enabling precise control over network
+connectivity and optimizing data transmission. In this comprehensive guide, we will explore the
+intricacies of the route command in Linux, unravel its functionalities, and delve into detailed
+examples to gain a profound understanding of its usage.
+route

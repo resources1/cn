@@ -1,0 +1,232 @@
+1) Selective ARQ
+
+set ns [new Simulator]
+
+set n0 [$ns node]
+set n1 [$ns node]
+
+$n0 color "red"
+$n1 color "red"
+$n0 shape circle ;
+$n1 shape circle ;
+
+$ns at 0.0 "$n0 label SYS1"
+$ns at 0.0 "$n1 label SYS2"
+
+set nf [open Srepeat.nam w]
+$ns namtrace-all $nf
+set f [open Srepeat.tr w]
+$ns trace-all $f
+
+$ns duplex-link $n0 $n1 1Mb 10ms DropTail
+$ns duplex-link-op $n0 $n1 orient right
+
+$ns queue-limit $n0 $n1 5
+
+set tcp [new Agent/TCP]
+$tcp set fid 1
+$ns attach-agent $n0 $tcp
+
+set sink [new Agent/TCPSink]
+$ns attach-agent $n1 $sink
+$ns connect $tcp $sink
+
+set ftp [new Application/FTP]
+$ftp attach-agent $tcp
+$ns at 0.05 "$ftp start"
+
+$ns at 0.06 "$tcp set windowlnit 8"
+$ns at 0.06 "$tcp set maxcwnd 8"
+
+$ns at 0.25 "$ns queue-limit $n0 $n1 0"
+$ns at 0.26 "$ns queue-limit $n0 $n1 10"
+$ns at 0.30 "$tcp set windowlnit 1"
+$ns at 0.30 "$tcp set maxcwnd 1"
+$ns at 0.30 "$ns queue-limit $n0 $n1 10"
+$ns at 0.47 "$ns detach-agent $n0 $tcp;$ns detach-agent $n1 $sink"
+
+$ns at 1.75 "finish"
+
+$ns at 0.0 "$ns trace-annotate \"Select and repeat\""
+$ns at 0.05 "$ns trace-annotate \"FTP starts at 0.05\""
+$ns at 0.06 "$ns trace-annotate \"Send 8 Packets from SYS1 to SYS2\""
+$ns at 0.26 "$ns trace-annotate \"Error Occurs in 4th packet\""
+$ns at 0.30 "$ns trace-annotate \"Retransmit Packet_4 from SYS1 to SYS2\""
+$ns at 1.5 "$ns trace-annotate \"FTP stops\""
+
+proc finish {} {
+    global ns nf
+    $ns flush-trace
+    close $nf
+    puts "filtering..."
+    exec nam Srepeat.nam &
+    exit 0
+}
+
+$ns run
+
+
+2) NS2 Practical
+
+set ns [new Simulator]
+
+$ns color 1 Blue
+$ns color 2 Green
+
+set nf [open out.nam w]
+$ns namtrace-all $nf
+
+
+proc finish {} {
+    global ns nf
+    $ns flush-trace
+    close $nf
+    exec nam out.nam &
+    exit 0
+}
+
+set n0 [$ns node]
+set n1 [$ns node]
+set n2 [$ns node]
+set n3 [$ns node]
+set n4 [$ns node]
+set n5 [$ns node]
+
+$ns duplex-link $n0 $n2 2Mb 10ms DropTail
+$ns duplex-link $n1 $n2 2Mb 10ms DropTail
+$ns duplex-link $n2 $n3 1.7Mb 20ms DropTail
+$ns duplex-link $n3 $n4 2Mb 10ms DropTail
+$ns duplex-link $n3 $n5 2Mb 10ms DropTail
+
+
+$ns duplex-link-op $n0 $n2 orient right-down
+$ns duplex-link-op $n1 $n2 orient right-up
+$ns duplex-link-op $n2 $n3 orient right
+$ns duplex-link-op $n3 $n4 orient right-down
+$ns duplex-link-op $n3 $n5 orient right-up
+
+
+#TCP
+set tcp [new Agent/TCP]
+$tcp set class_ 2
+$ns attach-agent $n0 $tcp
+
+set sink [new Agent/TCPSink]
+$ns attach-agent $n5 $sink
+$ns connect $tcp $sink
+$tcp set fid_ 1
+
+# FTP over TCP
+set ftp [new Application/FTP]
+$ftp attach-agent $tcp
+$ftp set type_ FTP
+
+#UDP
+set udp [new Agent/UDP]
+$ns attach-agent $n1 $udp
+set null [new Agent/Null]
+$ns attach-agent $n4 $null
+$ns connect $udp $null
+$udp set fid_ 2
+
+#CBR over UDP
+set cbr [new Application/Traffic/CBR]
+$cbr attach-agent $udp
+$cbr set packet_size_ 1000
+$cbr set rate_ 1mb
+$cbr set random_ false
+
+$ns at 0.1 "$cbr start"
+$ns at 1.0 "$ftp start"
+$ns at 4.0 "$ftp stop"
+$ns at 4.5 "$cbr stop"
+
+
+# Call the finish procedure after 5 seconds of simulation time
+$ns at 5.0 "finish"
+
+
+puts "CBR packet size = [$cbr set packet_size_]"
+puts "CBR interval = [$cbr set interval_]"
+$ns run
+
+
+3) Go Back N
+
+#send packets one by one
+set ns [new Simulator]
+set n0 [$ns node]
+set n1 [$ns node]
+set n2 [$ns node]
+set n3 [$ns node]
+set n4 [$ns node]
+set n5 [$ns node]
+$n0 color "purple"
+$n1 color "purple"
+$n2 color "violet"
+$n3 color "violet"
+$n4 color "chocolate"
+$n5 color "chocolate"
+$n0 shape box ;
+$n1 shape box ;
+$n2 shape box ;
+$n3 shape box ;
+$n4 shape box ;
+$n5 shape box ;
+$ns at 0.0 "$n0 label SYS0"
+$ns at 0.0 "$n1 label SYS1"
+$ns at 0.0 "$n2 label SYS2"
+$ns at 0.0 "$n3 label SYS3"
+$ns at 0.0 "$n4 label SYS4"
+$ns at 0.0 "$n5 label SYS5"
+set nf [open goback.nam w]
+$ns namtrace-all $nf
+set f [open goback.tr w]
+$ns trace-all $f
+$ns duplex-link $n0 $n2 1Mb 20ms DropTail
+$ns duplex-link-op $n0 $n2 orient right-down
+$ns queue-limit $n0 $n2 5
+$ns duplex-link $n1 $n2 1Mb 20ms DropTail
+$ns duplex-link-op $n1 $n2 orient right-up
+$ns duplex-link $n2 $n3 1Mb 20ms DropTail
+$ns duplex-link-op $n2 $n3 orient right
+$ns duplex-link $n3 $n4 1Mb 20ms DropTail
+$ns duplex-link-op $n3 $n4 orient right-up
+$ns duplex-link $n3 $n5 1Mb 20ms DropTail
+$ns duplex-link-op $n3 $n5 orient right-down
+Agent/TCP set_nam_tracevar_true
+set tcp [new Agent/TCP]
+$tcp set fid 1
+$ns attach-agent $n1 $tcp
+set sink [new Agent/TCPSink]
+$ns attach-agent $n4 $sink
+$ns connect $tcp $sink
+set ftp [new Application/FTP]
+$ftp attach-agent $tcp
+$ns at 0.05 "$ftp start"
+$ns at 0.06 "$tcp set windowlnit 6"
+$ns at 0.06 "$tcp set maxcwnd 6"
+$ns at 0.25 "$ns queue-limit $n3 $n4 0"
+$ns at 0.26 "$ns queue-limit $n3 $n4 10"
+$ns at 0.305 "$tcp set windowlnit 4"
+$ns at 0.305 "$tcp set maxcwnd 4"
+$ns at 0.368 "$ns detach-agent $n1 $tcp ; $ns detach-agent $n4 $sink"
+$ns at 1.5 "finish"
+$ns at 0.0 "$ns trace-annotate \"Goback N end\""
+$ns at 0.05 "$ns trace-annotate \"FTP starts at 0.01\""
+$ns at 0.06 "$ns trace-annotate \"Send 6Packets from SYS1 to SYS4\""
+$ns at 0.26 "$ns trace-annotate \"Error Occurs for 4th packet so not sent ack for the Packet\""
+$ns at 0.30 "$ns trace-annotate \"Retransmit Packet_4 to 6\""
+$ns at 1.0 "$ns trace-annotate \"FTP stops\""
+proc finish {} {
+global ns nf
+$ns flush-trace
+close $nf
+puts "filtering..."
+#exec tclsh../bin/namfilter.tcl goback.nam
+#puts "running nam..."
+exec nam goback.nam &
+exit 0
+}
+$ns run
+

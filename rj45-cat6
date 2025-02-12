@@ -1,0 +1,38 @@
+1)Registered Jack 45 Connector:
+RJ45 stands for Registered Jack 45 and is the most commonly used connector in wired networks.
+The jacks are mainly used to connect to the Local Area Network (LAN). It was earlier devised
+for telephones but is now widely used in Ethernet Networking. The 45 in RJ45 basically stands
+for the listing number. The width of RJ45 is usually greater than that of the telephone cables or
+other Registered Jacks. Compared to additional jacks the bandwidth provided by these is high
+and the range is usually 10 Gbps. Because of speed and enhanced security, they are used to
+connect personal computers to servers, routers etc. These jacks are mostly used in Star Topology.
+1.1)Structure of RJ45:
+RJ45 has a transparent plastic structure and is an 8-pin connector. It is an 8P8C(8 Point 8
+Contact) connector and the number of wires that can be connected is 8. The jacks are mostly
+used with Shielded Twisted Pair cables or Unshielded Twisted Pair cables. If we take a close
+look at the end of the Ethernet cable connected to the RJ45 we can see the 8 wires out of which 4
+wires are solid coloured and 4 are strip coloured.
+2)CAT6 Cable:
+Category 6 cable (Cat 6) is a standardized twisted pair cable for Ethernet and other network
+physical layers that is backward compatible with the Category 5/5e and Category 3 cable
+standards. Cat 6 must meet more stringent specifications for crosstalk and system noise than Cat
+5 and Cat 5e. The cable standard specifies performance of up to 250 MHz, compared to 100
+MHz for Cat 5 and Cat 5e. Whereas Category 6 cable has a reduced maximum length of 55
+meters (180 ft) when used for 10GBASE-T, Category 6A cable is characterized to 500 MHz
+3)Crimping Tool:
+A crimping tool is a handy device that allows you to create secure connections between
+wires and connectors. It works by deforming the connector onto the wire, ensuring a
+strong bond. With a crimping tool, you can easily join electrical wires, network cables,
+coaxial cables, and more.
+4)Crimping RJ45 Connector on Cat6 Cable:
+Untwist and Arrange the Pairs:
+ Untwist the twisted pairs of wires carefully and arrange them in the appropriate order
+according to the wiring standard you are using (T568A or T568B).
+ The typical order for each pair is:
+ Pair 1 (Blue/White Blue)
+ Pair 2 (Orange/White Orange)
+ Pair 3 (Green/White Green)
+ Pair 4 (Brown/White Brown)
+Insert Wires into RJ45 Connector
+Trim Excess Wires
+Crimp the Connector
